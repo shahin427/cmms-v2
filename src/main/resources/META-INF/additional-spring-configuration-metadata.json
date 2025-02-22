@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "spring.data.url",
+      "type": "java.lang.String",
+      "description": "Description for spring.data.url."
+    },
+    {
+      "name": "spring.data.url",
+      "type": "java.lang.String",
+      "description": "Description for spring.data.url."
+    }
+  ] }
