@@ -2710,6 +2710,16 @@ public class WorkOrderServiceImpl extends GeneralServiceImpl<WorkOrder> implemen
         workOrderDao.setEndDateOfWorkOrderSchedule(workOrderId);
     }
 
+    @Override
+    public List<SubSystemCalDto> subSystemFailureCal(String assetId) {
+        return workOrderDao.countSubSystemFailures(assetId);
+    }
+
+    @Override
+    public List<SubSystemFailureModeCalDto> subSystemFailureModeCal(String assetId) {
+        return workOrderDao.subSystemFailureModeCal(assetId);
+    }
+
 //    @Override
 //    public boolean checkWorkOrderPmCode(int pmCode) {
 //        return workOrderDao.checkWorkOrderPmCode(pmCode);

@@ -840,6 +840,16 @@ public class WorkOrderController {
         return ResponseEntity.ok().body(workOrderService.updateScheduleWorkOrder(workOrderScheduleDTO));
     }
 
+    @GetMapping("sub-system-cal")
+    public ResponseEntity<?> subSystemFailureCal(@RequestParam("assetId") String assetId) {
+        return ResponseEntity.ok().body(workOrderService.subSystemFailureCal(assetId));
+    }
+
+    @GetMapping("failure-mode-cal")
+    public ResponseEntity<?> subSystemFailureModeCal(@RequestParam("assetId") String assetId) {
+        return ResponseEntity.ok().body(workOrderService.subSystemFailureModeCal(assetId));
+    }
+
 //    @GetMapping("check-work-order-pm-code")
 //    public ResponseEntity<?> checkWorkOrderPmCode(@PathParam("pmCode") int pmCode) {
 //        return ResponseEntity.ok().body(workOrderService.checkWorkOrderPmCode(pmCode));

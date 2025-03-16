@@ -54,6 +54,7 @@ public class WorkOrder {
     private Long estimateCompletionDate;//تخمین  زمان  تکمیل  پس  از ساخت دستور کار
     private boolean rejectedInSchedule;//زمانبندی های رد شده
     private int number;
+    private String failureModeId;
     //-------------------------------------------------------------
     //از این به پایین فعلا نیازی نسیت
     private String title;
