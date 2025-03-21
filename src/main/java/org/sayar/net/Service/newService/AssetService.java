@@ -286,4 +286,6 @@ public interface AssetService extends GeneralService<Asset> {
     List<AssetNameAndId> getAllRootBuildings();
 
     long getAssetWorkingTime(String assetId);
+
+    List<Asset> subSystemFailureCount(String assetId);
 }

@@ -454,5 +454,7 @@ public interface WorkOrderDao extends GeneralDao<WorkOrder> {
 
     List<ResWorkOrderForCalendarGetListDTO> getTodayWorkOrderForCalendar();
 
+    List<RcfaFailureDto> countNumberOfTheAssetSubSystemFailure(List<String> subsystemIds);
+
 //    boolean checkWorkOrderPmCode(int pmCode);
 }

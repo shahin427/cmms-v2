@@ -396,5 +396,7 @@ public interface WorkOrderService extends GeneralService<WorkOrder> {
 
     void setEndDateOfWorkOrderSchedule(String workOrderId);
 
+    List<SubSystemFailureDto> subSystemFailureCount(String assetId);
+
 //    boolean checkWorkOrderPmCode(int pmCode);
 }

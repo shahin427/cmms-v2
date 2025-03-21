@@ -5,6 +5,7 @@ import org.bson.Document;
 import org.sayar.net.Controller.newController.MtbfDTO;
 import org.sayar.net.Controller.newController.dto.*;
 import org.sayar.net.General.dao.GeneralDaoImpl;
+import org.sayar.net.Model.Asset.Asset;
 import org.sayar.net.Model.CompletionDetail;
 import org.sayar.net.Model.DTO.*;
 import org.sayar.net.Model.MtbfReturn;
@@ -6818,6 +6819,24 @@ public class WorkOrderDaoImpl extends GeneralDaoImpl<WorkOrder> implements WorkO
 //        Set<ResWorkOrderForCalendarGetListDTO> setResult = new HashSet<>();
 //        setResult.addAll(result);
         return result;
+    }
+
+    @Override
+    public List<RcfaFailureDto> countNumberOfTheAssetSubSystemFailure(List<String> subsystemIds) {
+
+
+        MatchOperation matchStage = Aggregation.match(Criteria.where("mainSubSystemId").in(subsystemIds));
+        GroupOperation groupStage = Aggregation.group("mainSubSystemId")
+                .count().as("count");
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                matchStage,
+                groupStage,
+                Aggregation.project()
+                        .and("_id").as("assetId")
+                        .and("count").as("count")
+        );
+        return mongoOperations.aggregate(aggregation, Asset.class, RcfaFailureDto.class).getMappedResults();
     }
 
 //    @Override

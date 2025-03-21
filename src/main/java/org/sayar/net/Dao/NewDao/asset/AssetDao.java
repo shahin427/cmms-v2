@@ -368,4 +368,6 @@ public interface AssetDao extends GeneralDao<Asset> {
     List<AssetNameAndId> getAllRootBuildings();
 
     long getAssetWorkingTime(String assetId);
+
+    List<Asset> subSystemFailureCount(String assetId);
 }

@@ -14,7 +14,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/khales-sazan
-#      database: CMMS
+      database: CMMS
 #logging:
 #  level:
 #    org.springframework.data.mongodb: DEBUG

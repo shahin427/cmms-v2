@@ -769,6 +769,11 @@ public class AssetServiceImpl extends GeneralServiceImpl<Asset> implements Asset
         return dao.getAssetWorkingTime(assetId);
     }
 
+    @Override
+    public List<Asset> subSystemFailureCount(String assetId) {
+        return dao.subSystemFailureCount(assetId);
+    }
+
     //    ___________________________________________
     @Override
     public Asset add(Asset entity, String organId) {

@@ -2101,6 +2101,13 @@ public class AssetDaoImpl extends GeneralDaoImpl<Asset> implements AssetDao {
         return asset.getWorkingTime();
     }
 
+    @Override
+    public List<Asset> subSystemFailureCount(String assetId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("isPartOfAsset").is(assetId));
+        return mongoOperations.find(query, Asset.class);
+    }
+
     private void returnMethodToFindParentAsset(Asset asset, List<String> parentAssetIdList) {
 
         if (asset != null && asset.getIsPartOfAsset() != null) {

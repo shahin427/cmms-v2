@@ -2710,6 +2710,24 @@ public class WorkOrderServiceImpl extends GeneralServiceImpl<WorkOrder> implemen
         workOrderDao.setEndDateOfWorkOrderSchedule(workOrderId);
     }
 
+    @Override
+    public List<SubSystemFailureDto> subSystemFailureCount(String assetId) {
+        List<Asset> subsystems = assetService.subSystemFailureCount(assetId);
+        List<String> subsystemIds = subsystems.stream().map(Asset::getId).collect(Collectors.toList());
+        List<RcfaFailureDto> rcfaFailureDtos = workOrderDao.countNumberOfTheAssetSubSystemFailure(subsystemIds);
+        List<SubSystemFailureDto> subSystemFailureDtos = new ArrayList<>();
+        rcfaFailureDtos.forEach(rcfaFailureDto -> subsystems.forEach(subsystem -> {
+            if (rcfaFailureDto.getAssetId().equals(subsystem.getId())) {
+                subSystemFailureDtos.add(SubSystemFailureDto.builder()
+                        .subSystemId(subsystem.getId())
+                        .subSystemName(subsystem.getName())
+                        .count(rcfaFailureDto.getCount())
+                        .build());
+            }
+        }));
+        return subSystemFailureDtos;
+    }
+
 //    @Override
 //    public boolean checkWorkOrderPmCode(int pmCode) {
 //        return workOrderDao.checkWorkOrderPmCode(pmCode);
