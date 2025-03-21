@@ -2711,21 +2711,13 @@ public class WorkOrderServiceImpl extends GeneralServiceImpl<WorkOrder> implemen
     }
 
     @Override
-    public List<SubSystemFailureDto> subSystemFailureCount(String assetId) {
-        List<Asset> subsystems = assetService.subSystemFailureCount(assetId);
-        List<String> subsystemIds = subsystems.stream().map(Asset::getId).collect(Collectors.toList());
-        List<RcfaFailureDto> rcfaFailureDtos = workOrderDao.countNumberOfTheAssetSubSystemFailure(subsystemIds);
-        List<SubSystemFailureDto> subSystemFailureDtos = new ArrayList<>();
-        rcfaFailureDtos.forEach(rcfaFailureDto -> subsystems.forEach(subsystem -> {
-            if (rcfaFailureDto.getAssetId().equals(subsystem.getId())) {
-                subSystemFailureDtos.add(SubSystemFailureDto.builder()
-                        .subSystemId(subsystem.getId())
-                        .subSystemName(subsystem.getName())
-                        .count(rcfaFailureDto.getCount())
-                        .build());
-            }
-        }));
-        return subSystemFailureDtos;
+    public List<SubSystemCalDto> subSystemFailureCal(String assetId) {
+        return workOrderDao.countSubSystemFailures(assetId);
+    }
+
+    @Override
+    public List<SubSystemFailureModeCalDto> subSystemFailureModeCal(String assetId) {
+        return workOrderDao.subSystemFailureModeCal(assetId);
     }
 
 //    @Override

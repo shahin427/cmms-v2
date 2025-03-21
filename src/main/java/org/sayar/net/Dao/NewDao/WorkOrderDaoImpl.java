@@ -5,7 +5,6 @@ import org.bson.Document;
 import org.sayar.net.Controller.newController.MtbfDTO;
 import org.sayar.net.Controller.newController.dto.*;
 import org.sayar.net.General.dao.GeneralDaoImpl;
-import org.sayar.net.Model.Asset.Asset;
 import org.sayar.net.Model.CompletionDetail;
 import org.sayar.net.Model.DTO.*;
 import org.sayar.net.Model.MtbfReturn;
@@ -1792,6 +1791,7 @@ public class WorkOrderDaoImpl extends GeneralDaoImpl<WorkOrder> implements WorkO
         workOrder.setRequestedDate(workRequest.getRequestDate());
         workOrder.setNumber(workRequest.getNumber());
         workOrder.setMainSubSystemId(workRequest.getMainSubSystemId());
+        workOrder.setFailureModeId(workOrder.getFailureModeId());
         //----------------------
         //از این به پایین رو فعلا نیاز نیستش
         workOrder.setPriority(workRequest.getPriority());
@@ -6822,21 +6822,30 @@ public class WorkOrderDaoImpl extends GeneralDaoImpl<WorkOrder> implements WorkO
     }
 
     @Override
-    public List<RcfaFailureDto> countNumberOfTheAssetSubSystemFailure(List<String> subsystemIds) {
-
-
-        MatchOperation matchStage = Aggregation.match(Criteria.where("mainSubSystemId").in(subsystemIds));
-        GroupOperation groupStage = Aggregation.group("mainSubSystemId")
-                .count().as("count");
-
-        Aggregation aggregation = Aggregation.newAggregation(
-                matchStage,
-                groupStage,
+    public List<SubSystemCalDto> countSubSystemFailures(String assetId) {
+        Aggregation aggregation = newAggregation(
+                Aggregation.match(Criteria.where("assetId").in(assetId)),
+                Aggregation.group("mainSubSystemId")
+                        .count().as("count"),
                 Aggregation.project()
-                        .and("_id").as("assetId")
                         .and("count").as("count")
+                        .and("_id").as("subSystemId")
         );
-        return mongoOperations.aggregate(aggregation, Asset.class, RcfaFailureDto.class).getMappedResults();
+        return mongoOperations.aggregate(aggregation, WorkOrder.class, SubSystemCalDto.class).getMappedResults();
+    }
+
+    @Override
+    public List<SubSystemFailureModeCalDto> subSystemFailureModeCal(String assetId) {
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(Criteria.where("mainSubSystemId").is(assetId)),
+                Aggregation.group("failureModeId")
+                        .count().as("count"),
+                Aggregation.lookup("FAILURE_MODE", "_id", "_id", "failureMode"),
+                Aggregation.project()
+                        .and("count").as("count")
+                        .and(ArrayOperators.ArrayElemAt.arrayOf("failureMode.name").elementAt(0)).as("failureMode")
+        );
+        return mongoOperations.aggregate(aggregation, WorkOrder.class, SubSystemFailureModeCalDto.class).getMappedResults();
     }
 
 //    @Override
