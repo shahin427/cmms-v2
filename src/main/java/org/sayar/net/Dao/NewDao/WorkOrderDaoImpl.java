@@ -1791,7 +1791,7 @@ public class WorkOrderDaoImpl extends GeneralDaoImpl<WorkOrder> implements WorkO
         workOrder.setRequestedDate(workRequest.getRequestDate());
         workOrder.setNumber(workRequest.getNumber());
         workOrder.setMainSubSystemId(workRequest.getMainSubSystemId());
-        workOrder.setFailureModeId(workOrder.getFailureModeId());
+        workOrder.setFailureModeId(workRequest.getFailureModeId());
         //----------------------
         //از این به پایین رو فعلا نیاز نیستش
         workOrder.setPriority(workRequest.getPriority());
@@ -6829,7 +6829,13 @@ public class WorkOrderDaoImpl extends GeneralDaoImpl<WorkOrder> implements WorkO
                         .count().as("count"),
                 Aggregation.project()
                         .and("count").as("count")
-                        .and("_id").as("subSystemId")
+                        .and("_id").as("subSId")
+                        .and(ConvertOperators.ToObjectId.toObjectId("$subSystemId")).as("strSubSysId"),
+                Aggregation.lookup("asset","strSubSysId","_id","asset"),
+                Aggregation.project()
+                        .and("count").as("count")
+                        .and("subSId").as("subSystemId")
+                        .and("asset.name").as("subSystemName")
         );
         return mongoOperations.aggregate(aggregation, WorkOrder.class, SubSystemCalDto.class).getMappedResults();
     }

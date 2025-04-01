@@ -62,7 +62,7 @@ public class UserController {
         }
         User user = service.getUserForToken(request.getUsername());
         Print.print("user",user);
-//        if (user != null) {
+        if (user != null) {
             UserType userType = userTypeDao.getOneUserType(user.getUserTypeId());
             UserAndUserTypDTO userAndUserTypDTO = new UserAndUserTypDTO(user, userType);
 //            if (Password.checkPassword(request.getPassword(), user.getPassword()) && user.getUsername().equals(request.getUsername())) {
@@ -71,9 +71,9 @@ public class UserController {
 //            } else {
 //                return ResponseEntity.ok().body("\"نام کاربری یا پسورد اشتباه است\"");
 //            }
-//        } else {
-//            return ResponseEntity.ok().body("\"کاربری با این مشخصات وجود ندارد\"");
-//        }
+        } else {
+            return ResponseEntity.ok().body("\"کاربری با این مشخصات وجود ندارد\"");
+        }
     }
 
     @PostMapping("by-id-list")

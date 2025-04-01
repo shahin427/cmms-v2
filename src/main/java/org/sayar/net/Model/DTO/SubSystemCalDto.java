@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 public class SubSystemCalDto {
 
+    private String subSystemName;
     private String subSystemId;
     private Integer count;
 }
